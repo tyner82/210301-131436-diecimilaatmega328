@@ -35,36 +35,68 @@ void loop()
 {
   //RBSpin(); //original Function
 
-  Chase(0); //New Function, this function takes an 'argument' which represents which row to circle around
+  Chase(0,true); //New Function, this function takes an 'argument' which represents which row to circle around
   
   //This is an example of a way to change the behaviour of the Chase function
   // for (int i = 0; i < Rows; i++)
   // {
-  //   Chase(i);
+  //   Chase(i, i % 2 == 0);
   // }
 }
 
 //You can pick a ring to have the lights circle around
-void Chase(int  ring)
+void Chase(int  ring, bool forward)
 {
+    if (ring > 8 || ring < 0)
+    {
+        ring = 8;
+    }
   //if you remove the 'argument' above  so it looks like void Chase()
   //you would have to put this next line,
   //int ring = 0
   // having it as an argument means you could write other code to make this Function
   // perform in different ways
-  for(int j = RowStarts[ring + 1]; j < RowStarts[ring]; j++)
+    int start;
+    int finish;
+  if (forward == true)
   {
-    int lastLed;
-
-    if (j == 0 )
+    start = RowStarts[ring + 1];
+    finish = RowStarts[ring];
+    for(int j = start; j < finish; j++)
     {
-      lastLed = RowStarts[ring - 1];
+      int lastLed;
+
+      if (j == start )
+      {
+        lastLed = finish-1;
+      }
+      else lastLed = j - 1;
+      //leds[j] = CRGB::White;
+      //FastLED.show();
+      //delay(50);
+      //leds[lastLed] = CRGB::Black;
+        Console.WriteLine(j+" "+lastLed);
     }
-    else lastLed = j - 1;
-    leds[j] = CRGB::White;
-    FastLED.show();
-    delay(50);
-    leds[lastLed] = CRGB::Black;
+  }
+  else
+  {
+    start = RowStarts[ring]-1;
+    finish = RowStarts[ring+1]-1;
+    for(int j = start; j > finish; j--)
+    {
+      int lastLed;
+
+      if (j == start )
+      {
+        lastLed = finish+1;
+      }
+      else lastLed = j + 1;
+        Console.WriteLine(j+" "+lastLed);
+      //leds[j] = CRGB::White;
+      //FastLED.show();
+      //delay(50);
+      //leds[lastLed] = CRGB::Black;
+    }
   }
 }
 
