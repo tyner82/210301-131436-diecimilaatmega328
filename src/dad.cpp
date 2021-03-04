@@ -10,7 +10,7 @@ CRGB leds[NUM_LEDS];
 #define BRIGHTNESS  20
 
 //Put these Function definitions after your #define variables
-void Chase();
+void Chase(int  ring, int tailLength, bool continuous, bool forward);
 void RBSpin();
 
 //If we have the start of each ring, we can calculate how many leds per ring
@@ -35,17 +35,17 @@ void loop()
 {
   //RBSpin(); //original Function
 
-  Chase(0,true); //New Function, this function takes an 'argument' which represents which row to circle around
+  Chase(0, 5, true, true); //New Function, this function takes an 'argument' which represents which row to circle around
   
   //This is an example of a way to change the behaviour of the Chase function
   // for (int i = 0; i < Rows; i++)
   // {
-  //   Chase(i, i % 2 == 0);
+  //   Chase(i, 1, i % 2 == 0);
   // }
 }
 
 //You can pick a ring to have the lights circle around
-void Chase(int  ring, bool forward)
+void Chase(int  ring, int tailLength, bool continuous, bool forward)
 {
     if (ring > 8 || ring < 0)
     {
@@ -62,16 +62,18 @@ void Chase(int  ring, bool forward)
   {
     start = RowStarts[ring + 1];
     finish = RowStarts[ring];
-    for(int j = start; j < finish; j++)
+    for(int j = start; j < finish + (continuous ? 0 : tailLength); j++)
     {
       int lastLed;
 
-      if (j == start )
+      if (j < start + tailLength)
       {
-        lastLed = finish-1;
+        int diff = (start+tailLength)-j;
+        lastLed = finish - diff;
       }
-      else lastLed = j - 1;
-      leds[j] = CRGB::White;
+      else lastLed = (j - tailLength) < finish ? j-tailLength : finish-1 ;
+      int nextLed = j < finish ? j : finish-1;
+      leds[nextLed] = CRGB::White;
       FastLED.show();
       delay(50);
       leds[lastLed] = CRGB::Black;
@@ -81,16 +83,18 @@ void Chase(int  ring, bool forward)
   {
     start = RowStarts[ring]-1;
     finish = RowStarts[ring+1]-1;
-    for(int j = start; j > finish; j--)
+    for(int j = start; j > finish - (continuous ? 0 : tailLength); j--)
     {
       int lastLed;
 
-      if (j == start )
+      if (j > start - tailLength )
       {
-        lastLed = finish+1;
+        int diff = j - (start-tailLength);
+        lastLed = finish + diff;
       }
-      else lastLed = j + 1;
-      leds[j] = CRGB::White;
+      else lastLed = j + tailLength > finish ? j + tailLength : finish + 1;
+        int nextLed = j > finish ? j : finish + 1;
+      leds[nextLed] = CRGB::White;
       FastLED.show();
       delay(50);
       leds[lastLed] = CRGB::Black;
