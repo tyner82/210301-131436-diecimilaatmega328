@@ -71,11 +71,10 @@ void Chase(int  ring, bool forward)
         lastLed = finish-1;
       }
       else lastLed = j - 1;
-      //leds[j] = CRGB::White;
-      //FastLED.show();
-      //delay(50);
-      //leds[lastLed] = CRGB::Black;
-        Console.WriteLine(j+" "+lastLed);
+      leds[j] = CRGB::White;
+      FastLED.show();
+      delay(50);
+      leds[lastLed] = CRGB::Black;
     }
   }
   else
@@ -91,11 +90,10 @@ void Chase(int  ring, bool forward)
         lastLed = finish+1;
       }
       else lastLed = j + 1;
-        Console.WriteLine(j+" "+lastLed);
-      //leds[j] = CRGB::White;
-      //FastLED.show();
-      //delay(50);
-      //leds[lastLed] = CRGB::Black;
+      leds[j] = CRGB::White;
+      FastLED.show();
+      delay(50);
+      leds[lastLed] = CRGB::Black;
     }
   }
 }
