@@ -10,7 +10,7 @@ CRGB leds[NUM_LEDS];
 #define BRIGHTNESS  20
 
 //Put these Function definitions after your #define variables
-void Chase(int  ring, int tailLength, bool continuous, bool forward);
+void Chase(int  ring, int tailLength, bool continuous, bool forward, CRGB colour);
 void RBSpin();
 
 //If we have the start of each ring, we can calculate how many leds per ring
@@ -35,7 +35,8 @@ void loop()
 {
   //RBSpin(); //original Function
 
-  Chase(0, 5, true, true); //New Function, this function takes an 'argument' which represents which row to circle around
+  Chase( 0, 5, true, true, CRGB::Aqua); //New Function, this function takes an 'argument' which represents which row to circle around
+  Chase( 0, 5, true, true, CRGB::Crimson);
   
   //This is an example of a way to change the behaviour of the Chase function
   // for (int i = 0; i < Rows; i++)
@@ -45,7 +46,7 @@ void loop()
 }
 
 //You can pick a ring to have the lights circle around
-void Chase(int  ring, int tailLength, bool continuous, bool forward)
+void Chase(int  ring, int tailLength, bool continuous, bool forward, CRGB colour)
 {
     if (ring > 8 || ring < 0)
     {
@@ -73,10 +74,10 @@ void Chase(int  ring, int tailLength, bool continuous, bool forward)
       }
       else lastLed = (j - tailLength) < finish ? j-tailLength : finish-1 ;
       int nextLed = j < finish ? j : finish-1;
-      leds[nextLed] = CRGB::White;
+      leds[nextLed] = colour;
       FastLED.show();
       delay(50);
-      leds[lastLed] = CRGB::Black;
+      leds[lastLed].fadeToBlackBy(5);
     }
   }
   else
@@ -93,10 +94,9 @@ void Chase(int  ring, int tailLength, bool continuous, bool forward)
         lastLed = finish + diff;
       }
       else lastLed = j + tailLength > finish ? j + tailLength : finish + 1;
-      
       int nextLed = j > finish ? j : finish + 1;
       
-      leds[nextLed] = CRGB::HotPink;
+      leds[nextLed] = colour;
       FastLED.show();
       delay(50);
       leds[lastLed].fadeToBlackBy(5);
