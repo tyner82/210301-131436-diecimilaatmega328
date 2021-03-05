@@ -93,11 +93,13 @@ void Chase(int  ring, int tailLength, bool continuous, bool forward)
         lastLed = finish + diff;
       }
       else lastLed = j + tailLength > finish ? j + tailLength : finish + 1;
-        int nextLed = j > finish ? j : finish + 1;
-      leds[nextLed] = CRGB::White;
+      
+      int nextLed = j > finish ? j : finish + 1;
+      
+      leds[nextLed] = CRGB::HotPink;
       FastLED.show();
       delay(50);
-      leds[lastLed] = CRGB::Black;
+      leds[lastLed].fadeToBlackBy(5);
     }
   }
 }
